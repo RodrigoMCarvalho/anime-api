@@ -1,26 +1,14 @@
-package com.rodrigo.anime.model;
+package com.rodrigo.anime.dto;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "anime")
-public class Anime implements Serializable {
+public class AnimeDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty(message = "Nome obrigatório")
     private String nome;
     private Long ano;
-
-    public Anime(String name) {
-        this.nome = name;
-    }
-
-    public Anime() {
-    }
 
     public Long getId() {
         return id;
