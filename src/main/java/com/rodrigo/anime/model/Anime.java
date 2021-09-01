@@ -1,11 +1,14 @@
 package com.rodrigo.anime.model;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "anime")
+@Builder
 public class Anime implements Serializable {
 
     @Id
@@ -14,6 +17,12 @@ public class Anime implements Serializable {
     @NotEmpty(message = "Nome obrigatório")
     private String nome;
     private Long ano;
+
+    public Anime(Long id, String nome, Long ano) {
+        this.id = id;
+        this.nome = nome;
+        this.ano = ano;
+    }
 
     public Anime(String name) {
         this.nome = name;

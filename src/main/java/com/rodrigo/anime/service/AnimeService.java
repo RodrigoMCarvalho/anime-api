@@ -33,4 +33,8 @@ public class AnimeService {
     public void delete(Long id) {
         animeRepository.delete(getAnimeById(id));
     }
+
+    public List<Anime> getAnimeByNome(String nome) {
+        return animeRepository.findByNomeContainingIgnoreCase(nome);
+    }
 }

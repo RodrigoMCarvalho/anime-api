@@ -40,6 +40,11 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.getAnimeById(id));
     }
 
+    @GetMapping("/{nome}")
+    public ResponseEntity<List<Anime>> getAnimeByNome(@PathVariable String nome){
+        return ResponseEntity.ok(animeService.getAnimeByNome(nome));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAnime(@PathVariable Long id) {
         animeService.delete(id);
