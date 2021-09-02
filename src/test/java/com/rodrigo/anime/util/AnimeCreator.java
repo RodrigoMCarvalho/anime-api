@@ -14,7 +14,7 @@ public class AnimeCreator {
     }
 
     public static AnimeDTO createValidAnimeDTO() {
-        return AnimeDTO.builder().id(1L).nome("Cowboy Bebop").ano(2002L).build();
+        return AnimeDTO.builder().id(1L).nome("Samurai Champloo").ano(2004L).build();
     }
 
     public static Anime createAnimeNotName() {

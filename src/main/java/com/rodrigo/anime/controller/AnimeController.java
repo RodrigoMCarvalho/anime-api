@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -65,7 +64,6 @@ public class AnimeController {
     @PutMapping
     public ResponseEntity<Anime> updateAnime(@RequestBody @Valid AnimeDTO animeDTO) {
         return ResponseEntity.ok(animeService.save(animeDTO));
-
     }
 
 
