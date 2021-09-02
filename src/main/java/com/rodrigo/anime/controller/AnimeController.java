@@ -6,6 +6,8 @@ import com.rodrigo.anime.service.AnimeService;
 import com.rodrigo.anime.util.DateUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,9 +32,9 @@ public class AnimeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Anime>> getAnimes() {
+    public ResponseEntity<Page<Anime>> getAnimes(Pageable pageable) {
         //log.info(dateUtile.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return ResponseEntity.ok(animeService.getAnimes());
+        return ResponseEntity.ok(animeService.getAnimes(pageable));
     }
 
     @GetMapping("/{id}")
@@ -52,11 +54,10 @@ public class AnimeController {
     }
 
     @PostMapping
-    public ResponseEntity<Anime> saveAnime(@RequestBody @Valid AnimeDTO animeDTO, HttpServletResponse response) {
+    public ResponseEntity<Anime> saveAnime(@RequestBody @Valid AnimeDTO animeDTO) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(animeDTO.getId())
                 .toUri();
-        response.setHeader("Location", uri.toASCIIString());
 
         return ResponseEntity.created(uri).body(animeService.save(animeDTO));
     }

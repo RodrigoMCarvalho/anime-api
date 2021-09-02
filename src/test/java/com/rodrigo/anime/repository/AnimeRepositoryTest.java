@@ -1,6 +1,7 @@
 package com.rodrigo.anime.repository;
 
 import com.rodrigo.anime.model.Anime;
+import com.rodrigo.anime.util.AnimeCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,13 +19,9 @@ class AnimeRepositoryTest {
     @Autowired
     private AnimeRepository animeRepository;
 
-    private Anime createAnime() {
-        return Anime.builder().nome("Dragon Ball Z").ano(1984L).build();
-    }
-
     @Test
     void devePersistirAnimeComSucesso() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToBeSaved();
         Anime animeSalvo = animeRepository.save(anime);
 
         Assertions.assertThat(animeSalvo).isNotNull();
@@ -34,7 +31,7 @@ class AnimeRepositoryTest {
 
     @Test
     void deveAtualizarAnimeComSucesso() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToBeSaved();
         Anime animeSalvo = animeRepository.save(anime);
 
         animeSalvo.setNome("Vinland Saga");
@@ -45,7 +42,7 @@ class AnimeRepositoryTest {
 
     @Test
     void deveExcluirAnimeComSucesso() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToBeSaved();
         Anime animeSalvo = animeRepository.save(anime);
         animeRepository.delete(animeSalvo);
 
@@ -56,7 +53,7 @@ class AnimeRepositoryTest {
 
     @Test
     void deveLocalizarAnimePeloNomeComSucesso() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToBeSaved();
         Anime animeSalvo = animeRepository.save(anime);
 
         List<Anime> animes = animeRepository.findByNomeContainingIgnoreCase("gon");
@@ -67,7 +64,7 @@ class AnimeRepositoryTest {
 
     @Test
     void deveRetornarListaVaziaQuandoAnimeNaoEncontrado() {
-        Anime anime = createAnime();
+        Anime anime = AnimeCreator.createAnimeToBeSaved();
         Anime animeSalvo = animeRepository.save(anime);
 
         List<Anime> animes = animeRepository.findByNomeContainingIgnoreCase("tata");
@@ -77,7 +74,7 @@ class AnimeRepositoryTest {
 
     @Test
     void deveLançarConstraintViolationExceptionQuandoNomeForNulo() {
-        Anime anime = Anime.builder().ano(1990L).build();
+        Anime anime = AnimeCreator.createAnimeNotName();
 
         Assertions.assertThatThrownBy(() -> animeRepository.save(anime))
                 .isInstanceOf(ConstraintViolationException.class);
@@ -85,7 +82,7 @@ class AnimeRepositoryTest {
 
     @Test
     void deveLançarConstraintViolationExceptionComMensagemQuandoNomeForNulo() {
-        Anime anime = Anime.builder().ano(1990L).build();
+        Anime anime = AnimeCreator.createAnimeNotName();
 
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
                 .isThrownBy(() -> animeRepository.save(anime))

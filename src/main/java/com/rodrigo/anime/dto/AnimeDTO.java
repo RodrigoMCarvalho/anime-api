@@ -1,8 +1,11 @@
 package com.rodrigo.anime.dto;
 
+import lombok.Builder;
+
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
+@Builder
 public class AnimeDTO implements Serializable {
 
     private Long id;

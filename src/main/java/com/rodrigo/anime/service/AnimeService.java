@@ -6,7 +6,10 @@ import com.rodrigo.anime.model.Anime;
 import com.rodrigo.anime.repository.AnimeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.*;
 
@@ -16,8 +19,8 @@ public class AnimeService {
     @Autowired
     private AnimeRepository animeRepository;
 
-    public List<Anime> getAnimes() {
-        return animeRepository.findAll();
+    public Page<Anime> getAnimes(Pageable pageable) {
+        return animeRepository.findAll(pageable);
     }
 
     public Anime save(AnimeDTO animeDTO) {
