@@ -108,7 +108,7 @@ class AnimeControllerIT {
     @Test
     void deveDeletarAnimePoIdComSucesso() {
         Long idEsperado = animeRepository.save(AnimeCreator.createValidAnime()).getId();
-        
+
         ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/v1/animes/{id}",
                 HttpMethod.DELETE, null, Void.class, idEsperado);
 
