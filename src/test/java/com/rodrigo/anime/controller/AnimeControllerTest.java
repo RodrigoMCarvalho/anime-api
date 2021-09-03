@@ -2,6 +2,7 @@ package com.rodrigo.anime.controller;
 
 import com.rodrigo.anime.dto.AnimeDTO;
 import com.rodrigo.anime.model.Anime;
+import com.rodrigo.anime.repository.AnimeRepository;
 import com.rodrigo.anime.service.AnimeService;
 import com.rodrigo.anime.util.AnimeCreator;
 import org.assertj.core.api.Assertions;
@@ -13,6 +14,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
@@ -42,8 +45,10 @@ class AnimeControllerTest {
         List<Anime> animes = List.of(AnimeCreator.createValidAnime());
 
         BDDMockito.when(animeServiceMock.getAnimes(ArgumentMatchers.any())).thenReturn(animePage);
+        BDDMockito.when(animeServiceMock.getListAnimes()).thenReturn(animes);
         BDDMockito.when(animeServiceMock.getAnimeById(ArgumentMatchers.anyLong())).thenReturn(animeValido);
         BDDMockito.when(animeServiceMock.getAnimeByNome(ArgumentMatchers.anyString())).thenReturn(animes);
+        BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimeDTO.class))).thenReturn(animeValido);
         BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimeDTO.class))).thenReturn(animeValido);
         BDDMockito.doNothing().when(animeServiceMock).delete(ArgumentMatchers.anyLong());
     }
@@ -59,7 +64,17 @@ class AnimeControllerTest {
     }
 
     @Test
-    void deveRetornarAnimePoIdComSucesso() {
+    void deveRetornarListaDeAnimesComSucesso() {
+        String nomeEsperado = AnimeCreator.createValidAnime().getNome();
+        List<Anime> animes = animeController.getAnimes().getBody();
+
+        Assertions.assertThat(animes).isNotNull();
+        Assertions.assertThat(animes).isNotEmpty().hasSize(1);
+        Assertions.assertThat(animes.get(0).getNome()).isEqualTo(nomeEsperado);
+    }
+
+    @Test
+    void deveRetornarAnimePorIdComSucesso() {
         Long idEsperado = AnimeCreator.createValidAnime().getId();
         Anime anime = animeController.getAnimeById(idEsperado).getBody();
 
@@ -95,6 +110,21 @@ class AnimeControllerTest {
 
         Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         Assertions.assertThat(responseEntity.getHeaders().getLocation().getPath()).isEqualTo("/1");
+    }
+
+    @Test
+    void deveAtualizarAnimeComSucesso() {
+        AnimeDTO animeDTO = AnimeCreator.createValidAnimeDTO();
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        Anime animeSalvo = animeController.saveAnime(animeDTO).getBody();
+        animeSalvo.setNome("Lost Canvas");
+        BeanUtils.copyProperties(animeSalvo, animeDTO);
+        Anime animeAtualizado = animeController.updateAnime(animeDTO).getBody();
+
+        Assertions.assertThat(animeAtualizado.getNome()).isEqualTo(animeSalvo.getNome());
     }
 
     @Test

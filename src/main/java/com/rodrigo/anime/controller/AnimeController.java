@@ -36,13 +36,18 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.getAnimes(pageable));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Anime>> getAnimes() {
+        return ResponseEntity.ok(animeService.getListAnimes());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Anime> getAnimeById(@PathVariable Long id) {
         return ResponseEntity.ok(animeService.getAnimeById(id));
     }
 
-    @GetMapping("/{nome}")
-    public ResponseEntity<List<Anime>> getAnimeByNome(@PathVariable String nome){
+    @GetMapping("/busca")
+    public ResponseEntity<List<Anime>> getAnimeByNome(@RequestParam String nome){
         return ResponseEntity.ok(animeService.getAnimeByNome(nome));
     }
 

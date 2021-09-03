@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
@@ -23,6 +24,11 @@ public class AnimeService {
         return animeRepository.findAll(pageable);
     }
 
+    public List<Anime> getListAnimes() {
+        return animeRepository.findAll();
+    }
+
+    @Transactional
     public Anime save(AnimeDTO animeDTO) {
         Anime anime = new Anime();
         BeanUtils.copyProperties(animeDTO, anime);
@@ -33,6 +39,7 @@ public class AnimeService {
         return animeRepository.findById(id).orElseThrow(() -> new AnimeNotFoundException("Anime não encontrado!"));
     }
 
+    @Transactional
     public void delete(Long id) {
         animeRepository.delete(getAnimeById(id));
     }
